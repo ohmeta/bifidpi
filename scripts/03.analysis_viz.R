@@ -125,8 +125,22 @@ if (file.exists(hmm_path)) {
   draw(h2)
 }
 
-# Heatmap of key traits from Panaroo (if needed)
-# ...
+# Heatmap of top enriched genes from Panaroo
+top_enriched_genes <- enriched$Gene[1:min(25, nrow(enriched))]
+viz_mat_enriched <- as.matrix(gene_data_sub[rownames(gene_data_sub) %in% top_enriched_genes, , drop=FALSE])
+
+if (nrow(viz_mat_enriched) > 0) {
+  # Reorder rows to match the p-value ranking
+  viz_mat_enriched <- viz_mat_enriched[match(intersect(top_enriched_genes, rownames(viz_mat_enriched)), rownames(viz_mat_enriched)), ]
+  
+  h3 <- Heatmap(viz_mat_enriched, name = "Enriched Gene", 
+                top_annotation = ha,
+                col = c("0" = "white", "1" = "orange"),
+                row_names_side = "left",
+                row_names_gp = gpar(fontsize = 8),
+                column_title = "B. longum: Top Differentially Abundant Genes (p < 0.05)")
+  draw(h3)
+}
 
 dev.off()
 
