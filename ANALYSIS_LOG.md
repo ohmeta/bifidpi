@@ -30,7 +30,8 @@ This document serves as both a technical report and a pedagogical record of the 
 *   **Solution**: Lowered `--core_threshold` to `0.5`. This ensures that genes present in at least 50% of the genomes (14/28) are captured for the phylogenomic tree construction.
 *   **How the tree was built**: By lowering the threshold to 50%, Panaroo could generate a `core_gene_alignment.aln`. For MAGs missing a specific gene, Panaroo fills the alignment with gaps (`---`). IQ-TREE then uses the concatenated sequence of these "pseudo-core" genes to calculate the phylogeny, allowing us to build a tree even with fragmented data.
 *   **Fix**: Modified `scripts/01.run_genomics.sh`.
-*   **Note on Summary Statistics**: Even after this fix, `summary_statistics.txt` will still show **0 Core genes**. This is because Panaroo's summary file uses fixed reporting bins (99% and 95%). Our `--core_threshold 0.5` parameter affects the **processing logic** (which genes are included in the alignment) rather than the **reporting labels**. The genes used for the tree are currently located in the "Shell genes" bin of the summary report.
+*   **Note on Summary Statistics**: Even after this fix, `summary_statistics.txt` will still show **0 Core genes**. This is because Panaroo's summary file uses fixed reporting bins (99% and 95%). Our `--core_threshold 0.5` parameter affects the **processing logic** (which genes are included in the alignment) rather than the **reporting labels**.
+*   **Why aligned genes (1550) < shell genes (2104)?**: The "Shell" bin in the summary includes every gene present in 15% to 95% of genomes. However, our tree only uses genes present in >= 50% of genomes. Thus, many "Shell" genes that were too rare (e.g., present in only 20% of genomes) were correctly excluded from the phylogenetic alignment to ensure tree accuracy.
 
 ### Phase 2: The HMM Preparation (Step 2)
 *   **Problem**: `markers.hmm` was missing, and initial strategy documents had incorrect IDs.
