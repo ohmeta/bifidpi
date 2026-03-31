@@ -39,7 +39,15 @@ We investigate why certain *B. longum* strains transition efficiently between th
 - **Principle**: Uses **Profile Hidden Markov Models (pHMMs)**. A pHMM is a statistical model of a Multiple Sequence Alignment (MSA) that captures position-specific conservation.
 - **Sensitivity**: It is far more sensitive than BLAST. While BLAST looks for exact character matches, HMMER looks for the "evolutionary signature" of a protein family, allowing it to find functional domains even in highly mutated sequences.
 
-### 2.4 IQ-TREE (Phylogenomics)
+### 2.4 skani (ANI Clustering)
+- **Principle**: Uses an alignment-free approach based on Mash distances and sparse k-mer mapping to calculate **Average Nucleotide Identity (ANI)**.
+- **Why**: It is extremely fast and provides the strain-level resolution needed to confirm if Exposure MAGs are genetically identical (clonal) or just functionally similar.
+
+### 2.5 dbCAN (CAZyme Profiling)
+- **Principle**: An automated pipeline that combines HMMER, DIAMOND, and dbCAN-sub database searches to annotate **Carbohydrate-Active enZymes (CAZymes)**.
+- **Why**: *Bifidobacterium* fitness is defined by glycan utilization. dbCAN maps the exact HMO, mucin, and dietary sugar degradation potential of each strain.
+
+### 2.6 IQ-TREE (Phylogenomics)
 - **Principle**: Uses **Maximum Likelihood (ML)** to estimate the most probable evolutionary tree given the core-gene alignment.
 - **Role**: It establishes the "Evolutionary Null Model." It tells us who is related to whom, allowing us to distinguish between vertical inheritance (Clonal) and horizontal acquisition (Convergent).
 
