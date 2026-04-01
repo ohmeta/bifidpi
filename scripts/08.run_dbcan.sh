@@ -22,7 +22,7 @@ for faa in $ANN_DIR/*/*.faa; do
     # Run dbCAN
     # -t: tools (hmmer and diamond are standard)
     # --db_dir: Assuming dbCAN database is pre-configured or in standard location
-    run_dbcan $faa protein --out_dir $sample_out --threads 32 --tools hmmer diamond
+    run_dbcan $faa protein --out_dir $sample_out --hmm_cpu 4 --dia_cpu 4 --tools hmmer diamond --db_dir $BASE_DIR/db 2>&1 | tail -3
 done
 
 echo ">>> dbCAN complete. Results in $OUT_DIR"

@@ -13,6 +13,6 @@ echo ">>> Running skani to screen 28 MAGs against 4,098 global genomes..."
 
 # Using 'dist' instead of 'triangle' because we are comparing two sets (Search mode)
 # -q: query (your MAGs), -r: reference (the 4,098 genomes)
-conda run -n env-ecogenomics skani dist -q $MAG_DIR/*.fa* -r $BIL_DIR/*.fa* -o $OUT_DIR/mag_vs_bil_ani.txt --threads 32
+conda run -n env-ecogenomics skani dist -q "$MAG_DIR"/*.fa* -r "$BIL_DIR"/*.fa* -o "$OUT_DIR/mag_vs_bil_ani.txt" -t 32
 
 echo ">>> Screening complete. Results in $OUT_DIR/mag_vs_bil_ani.txt"

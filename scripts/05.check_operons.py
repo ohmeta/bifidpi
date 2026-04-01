@@ -33,11 +33,15 @@ def analyze_operons():
         # Find node IDs for these genes
         node_map = {}
         for node, data in G.nodes(data=True):
-            gene_name = data.get('label', '')
-            if any(g in gene_name for g in genes):
-                # Map standard name to Panaroo node ID
-                matched_gene = [g for g in genes if g in gene_name][0]
-                node_map[matched_gene] = node
+            # Search both 'name' and 'annotation' fields
+            name = data.get('name', '')
+            ann = data.get('annotation', '')
+            desc = data.get('description', '')
+            combined = f"{name} {ann} {desc}"
+            for g in genes:
+                if g.lower() in combined.lower() and g not in node_map:
+                    node_map[g] = node
+                    break
         
         # Check adjacency
         found_genes = list(node_map.keys())

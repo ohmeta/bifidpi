@@ -13,7 +13,7 @@ mkdir -p $RES_DIR/annotations $RES_DIR/pangenome $RES_DIR/phylogeny
 echo ">>> Running Bakta for local MAGs..."
 for f in $MAG_DIR/*.fa; do
     id=$(basename $f .fa)
-    prokka --outdir $RES_DIR/annotations/$id --prefix $id --genus Bifidobacterium --species longum --cpus 32 $f
+    conda run -n env-blongpi prokka --outdir $RES_DIR/annotations/$id --prefix $id --genus Bifidobacterium --species longum --cpus 32 $f
 done
 
 # 1b. Optional: Annotate selected references from Cell Atlas
@@ -24,7 +24,7 @@ if [ -f "$REF_LIST" ]; then
         id=$(basename "$ref_path" .fa)
         if [ ! -d "$RES_DIR/annotations/$id" ]; then
             echo "Annotating reference: $id"
-            prokka --outdir $RES_DIR/annotations/$id --prefix $id --genus Bifidobacterium --species longum --cpus 32 "$ref_path"
+            conda run -n env-blongpi prokka --outdir $RES_DIR/annotations/$id --prefix $id --genus Bifidobacterium --species longum --cpus 32 "$ref_path"
         fi
     done < "$REF_LIST"
 fi
@@ -35,8 +35,8 @@ echo ">>> Running Panaroo..."
 GFFS=$(ls $RES_DIR/annotations/*/*.gff)
 # Suppress Biopython warnings and adjust core threshold for MAGs
 export PYTHONWARNINGS="ignore::BiopythonDeprecationWarning"
-panaroo -i $GFFS -o $RES_DIR/pangenome --clean-mode strict -a core --core_threshold 0.5 --threads 32
+conda run -n env-blongpi panaroo -i $GFFS -o $RES_DIR/pangenome --clean-mode strict -a core --core_threshold 0.5 --threads 32
 
 # 3. Phylogeny
 echo ">>> Running IQ-TREE..."
-iqtree -s $RES_DIR/pangenome/core_gene_alignment.aln -m GTR+G -nt AUTO -bb 1000 -pre $RES_DIR/phylogeny/blongum_core
+conda run -n env-blongpi iqtree -s $RES_DIR/pangenome/core_gene_alignment.aln -m GTR+G -nt AUTO -bb 1000 -redo -pre $RES_DIR/phylogeny/blongum_core
